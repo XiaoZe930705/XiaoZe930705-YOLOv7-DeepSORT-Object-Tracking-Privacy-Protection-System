@@ -1,0 +1,25 @@
+python deep_sort_tracking_id.py --weights yolov7.pt  --img 640  --source 0 #電腦鏡頭、手機攝影機
+python deep_sort_tracking_id.py --weights yolov7.pt  --img 640  --source 1 #手機攝影機
+python deep_sort_tracking_id_googlesheets.py --weights yolov7.pt  --img 640  --source 0 --device=0      #CUDA加速偵測，寫入googlesheet版本
+python cpu-detection.py --weights yolov7.pt  --img 640  --source 0   --device='cpu'#CPU偵測 因為程式碼會優先尋找有沒有GPU，如果強制-device='cpu'，程式依舊會先執行GPU，故而外製作一個CPU優先的
+
+
+
+python deep_sort_tracking_id_sql-cuda.py --weights yolov7.pt  --img 640  --source 0 --device=0  #檢測攝影機 寫入SQL版本
+
+
+python deep_sort_tracking_id_sql_video.py --weights yolov7.pt  --img 640  --device=0  #檢測影片 寫入SQL
+
+python deep_sort_tracking_id_googlesheets.py --weights yolov7.pt --img 640 --source 0 --device 0
+
+python deep_sort_tracking_id_googlesheets-video.py --weights yolov7.pt --img 640  --device 0  #檢測影片版本
+
+
+python deep_sort_tracking_id_sql.py --device 0 --view-img    #每分鐘寫入版-cuda
+
+
+python deep_sort_tracking_id_sql-5second.py --device 0 --view-img 　　#5秒寫入版-cuda
+
+
+python deep_sort_tracking_id_sql-xpu.py --weights yolov7.pt  --img 640  --source 0 --device=xpu  #xpu版使用GPU或NPU，同時使用CPU
+

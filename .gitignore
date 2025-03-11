@@ -1,8 +1,50 @@
+# 忽略圖片與影片
 *.png
 *.jpg
+*.jpeg
+*.gif
+*.bmp
 *.mp4
 *.mov
 *.mkv
+*.avi
+
+# 忽略壓縮檔案
 *.zip
+*.tar
+*.gz
+*.rar
+
+# 忽略模型權重檔案（例如 PyTorch 或 TensorFlow）
 *.pt
-*.txt
+*.h5
+*.tflite
+*.onnx
+*.pb
+*.weights
+
+# 忽略文字與紀錄檔案
+*.log
+*.csv
+*.json
+
+# 忽略 API 金鑰或機密資訊
+yolo-deepsort-api-token.json
+.env
+
+# 忽略 Python 產生的臨時文件
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.DS_Store
+
+# 忽略 Jupyter Notebook 的快取檔
+.ipynb_checkpoints/
+
+# 忽略 VS Code 設定（如果你使用 VS Code）
+.vscode/
+
+# 忽略 Conda & Virtualenv
+venv/
+.env/

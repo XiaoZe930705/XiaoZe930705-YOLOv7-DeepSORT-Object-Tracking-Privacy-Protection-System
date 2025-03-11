@@ -1,0 +1,98 @@
+FlowID：1
+LocationID：101（某商場入口）
+TimeSlotID：2024-09-01 10:00-11:00
+FlowCount：150（表示該時間段內有150人進入該入口）
+
+
+LocationID 為 101 的位置
+TimeSlotID 為 2024-09-01 10:00 到 11:00 的時間段
+PersonCount 記錄為 150 人
+AverageStayDuration 記錄為 15 分鐘
+PK（Primary Key）主鍵
+FK（Foreign Key）外鍵
+----------------------------------------
+更新的 ER 模型
+1. 實體（Entities）
+1.1. Person（人員）
+
+PersonID (主鍵，PK)：int，NOT NULL。
+1.2. Location（位置）
+
+LocationID (主鍵，PK)：int，NOT NULL。
+LocationName：varchar(30)，NOT NULL。
+SpaceSize：float，NOT NULL。
+1.3. TimeSlot（時間段）
+
+TimeSlotID (主鍵，PK)：int，NOT NULL。
+StartTime：datetime，NOT NULL。
+EndTime：datetime，NOT NULL。
+1.4. Movement（移動記錄）
+
+MovementID (主鍵，PK)：int，NOT NULL。
+PersonID (外鍵，FK1)：int，NOT NULL。
+LocationID (外鍵，FK2)：int，NOT NULL。
+TimeSlotID (外鍵，FK3)：int，NOT NULL。
+ArrivalTime：datetime，NOT NULL。
+DepartureTime：datetime，NOT NULL。
+1.5. StayRecord（停留記錄）
+
+StayRecordID (主鍵，PK)：int，NOT NULL。
+PersonID (外鍵，FK1)：int，NOT NULL。
+LocationID (外鍵，FK2)：int，NOT NULL。
+TimeSlotID (外鍵，FK3)：int，NOT NULL。
+ArrivalTime：datetime，NOT NULL。
+DepartureTime：datetime，NOT NULL。
+Duration：int。
+1.6. TrafficCount（人流量記錄）
+
+TrafficCountID (主鍵，PK)：int，NOT NULL。
+LocationID (外鍵，FK1)：int，NOT NULL。
+TimeSlotID (外鍵，FK2)：int，NOT NULL。
+PersonCount：int，NOT NULL。
+AverageStayDuration：int。
+1.7. Congestion（壅塞記錄）
+
+CongestionID (主鍵，PK)：int，NOT NULL。
+LocationID (外鍵，FK1)：int，NOT NULL。
+TimeSlotID (外鍵，FK2)：int，NOT NULL。
+Occupancy：int，NOT NULL。
+IsCongested：boolean。
+1.8. ComfortRecord（舒適紀錄）
+
+ComfortRecordID (主鍵，PK)：int，NOT NULL。
+LocationID (外鍵，FK1)：int，NOT NULL。
+TimeSlotID (外鍵，FK2)：int，NOT NULL。
+IsComfortable：boolean。
+
+
+2. 關係（Relationships）
+2.1. Person 與 Movement
+關係：一對多（Person 一個人可以有多次 Movement 移動記錄）。
+外鍵：Movement 中的 PersonID 連接到 Person 的 PersonID。
+2.2. Location 與 Movement
+關係：一對多（每個 Location 可以有多條 Movement 記錄）。
+外鍵：Movement 中的 LocationID 連接到 Location 的 LocationID。
+2.3. TimeSlot 與 Movement
+關係：一對多（每個 TimeSlot 可以有多條 Movement 記錄）。
+外鍵：Movement 中的 TimeSlotID 連接到 TimeSlot 的 TimeSlotID。
+2.4. Person 與 StayRecord
+關係：一對多（Person 一個人可以有多次 StayRecord 停留記錄）。
+外鍵：StayRecord 中的 PersonID 連接到 Person 的 PersonID。
+2.5. Location 與 StayRecord
+關係：一對多（每個 Location 可以有多條 StayRecord 記錄）。
+外鍵：StayRecord 中的 LocationID 連接到 Location 的 LocationID。
+2.6. TimeSlot 與 StayRecord
+關係：一對多（每個 TimeSlot 可以有多條 StayRecord 記錄）。
+外鍵：StayRecord 中的 TimeSlotID 連接到 TimeSlot 的 TimeSlotID。
+2.7. Location 與 TrafficCount
+關係：一對多（每個 Location 可以有多條 TrafficCount 記錄）。
+外鍵：TrafficCount 中的 LocationID 連接到 Location 的 LocationID。
+2.8. TimeSlot 與 TrafficCount
+關係：一對多（每個 TimeSlot 可以有多條 TrafficCount 記錄）。
+外鍵：TrafficCount 中的 TimeSlotID 連接到 TimeSlot 的 TimeSlotID。
+2.9. Location 與 Congestion
+關係：一對多（每個 Location 可以有多條 Congestion 記錄）。
+外鍵：Congestion 中的 LocationID 連接到 Location 的 LocationID。
+2.10. TimeSlot 與 Congestion
+關係：一對多（每個 TimeSlot 可以有多條 Congestion 記錄）。
+外鍵：Congestion 中的 TimeSlotID 連接到 TimeSlot 的 TimeSlotID。

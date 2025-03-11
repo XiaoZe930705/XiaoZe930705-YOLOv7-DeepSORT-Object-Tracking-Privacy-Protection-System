@@ -1,0 +1,344 @@
+當然，以下是您所定義的資料實體與關係的詳細解釋，使用繁體中文描述。
+
+---
+
+## **1. 實體（Entities）**
+
+### **1.1. Person（人員）**
+
+**描述：** 此實體用於紀錄個別人員的基本資訊。
+
+**屬性：**
+- **`PersonID`** (主鍵，PK)：`int`，**不可為空（NOT NULL）**
+  - **說明：** 唯一識別每個人員的編號。每個人都有一個獨特的 `PersonID`，用於區分不同的人員。
+
+---
+
+### **1.2. Location（位置）**
+
+**描述：** 此實體用於紀錄特定地點的相關資訊。
+
+**屬性：**
+- **`LocationID`** (主鍵，PK)：`int`，**不可為空（NOT NULL）**
+  - **說明：** 唯一識別每個地點的編號。每個位置都有一個獨特的 `LocationID`。
+  
+- **`LocationName`**：`varchar(30)`，**不可為空（NOT NULL）**
+  - **說明：** 地點的名稱，例如「大廳」、「走廊」、「會議室」等，便於識別和管理。
+
+- **`SpaceSize`**：`float`，**不可為空（NOT NULL）**
+  - **說明：** 表示該地點的空間大小，通常以平方米（或其他適當單位）表示。這個值用於計算該地點的容納能力，進而判斷壅塞和舒適度。
+
+---
+
+### **1.3. TimeSlot（時間段）**
+
+**描述：** 此實體用於紀錄特定的時間區間。
+
+**屬性：**
+- **`TimeSlotID`** (主鍵，PK)：`int`，**不可為空（NOT NULL）**
+  - **說明：** 唯一識別每個時間段的編號。
+
+- **`StartTime`**：`datetime`，**不可為空（NOT NULL）**
+  - **說明：** 時間段的開始時間。
+
+- **`EndTime`**：`datetime`，**不可為空（NOT NULL）**
+  - **說明：** 時間段的結束時間。
+
+**備註：** `StartTime` 和 `EndTime` 定義了一個明確的時間範圍，用於統計和分析在該時間段內發生的各種活動。
+
+---
+
+### **1.4. Movement（移動記錄）**
+
+**描述：** 此實體用於紀錄人員在不同地點之間的移動情況。
+
+**屬性：**
+- **`MovementID`** (主鍵，PK)：`int`，**不可為空（NOT NULL）**
+  - **說明：** 唯一識別每條移動記錄的編號。
+
+- **`PersonID`** (外鍵，FK1)：`int`，**不可為空（NOT NULL）**
+  - **說明：** 連結到 `Person` 實體，表示是哪個人員的移動。
+
+- **`LocationID`** (外鍵，FK2)：`int`，**不可為空（NOT NULL）**
+  - **說明：** 連結到 `Location` 實體，表示人員移動到哪個地點。
+
+- **`TimeSlotID`** (外鍵，FK3)：`int`，**不可為空（NOT NULL）**
+  - **說明：** 連結到 `TimeSlot` 實體，表示移動發生的時間段。
+
+- **`ArrivalTime`**：`datetime`，**不可為空（NOT NULL）**
+  - **說明：** 人員到達該地點的具體時間。
+
+- **`DepartureTime`**：`datetime`，**不可為空（NOT NULL）**
+  - **說明：** 人員離開該地點的具體時間。
+
+**備註：** 透過這些資訊，可以追蹤人員的移動路徑和停留時間，為分析人流動向提供數據支持。
+
+---
+
+### **1.5. StayRecord（停留記錄）**
+
+**描述：** 此實體用於紀錄人員在特定地點的停留詳情。
+
+**屬性：**
+- **`StayRecordID`** (主鍵，PK)：`int`，**不可為空（NOT NULL）**
+  - **說明：** 唯一識別每條停留記錄的編號。
+
+- **`PersonID`** (外鍵，FK1)：`int`，**不可為空（NOT NULL）**
+  - **說明：** 連結到 `Person` 實體，表示是哪個人員的停留。
+
+- **`LocationID`** (外鍵，FK2)：`int`，**不可為空（NOT NULL）**
+  - **說明：** 連結到 `Location` 實體，表示人員停留的地點。
+
+- **`TimeSlotID`** (外鍵，FK3)：`int`，**不可為空（NOT NULL）**
+  - **說明：** 連結到 `TimeSlot` 實體，表示停留發生的時間段。
+
+- **`ArrivalTime`**：`datetime`，**不可為空（NOT NULL）**
+  - **說明：** 人員到達該地點的具體時間。
+
+- **`DepartureTime`**：`datetime`，**不可為空（NOT NULL）**
+  - **說明：** 人員離開該地點的具體時間。
+
+- **`Duration`**：`int`
+  - **說明：** 人員在該地點停留的時長，通常以分鐘或秒為單位。該值可透過 `DepartureTime` 減去 `ArrivalTime` 計算得出。
+
+**備註：** 這些資訊有助於了解人員在特定地點的停留行為，進而分析該地點的使用情況和人流特徵。
+
+---
+
+### **1.6. TrafficCount（人流量記錄）**
+
+**描述：** 此實體用於紀錄特定地點在特定時間段內的人流量資訊。
+
+**屬性：**
+- **`TrafficCountID`** (主鍵，PK)：`int`，**不可為空（NOT NULL）**
+  - **說明：** 唯一識別每條人流量記錄的編號。
+
+- **`LocationID`** (外鍵，FK1)：`int`，**不可為空（NOT NULL）**
+  - **說明：** 連結到 `Location` 實體，表示人流量所屬的地點。
+
+- **`TimeSlotID`** (外鍵，FK2)：`int`，**不可為空（NOT NULL）**
+  - **說明：** 連結到 `TimeSlot` 實體，表示人流量統計的時間段。
+
+- **`PersonCount`**：`int`，**不可為空（NOT NULL）**
+  - **說明：** 在指定時間段內通過或存在於該地點的人數總計。
+
+- **`AverageStayDuration`**：`int`
+  - **說明：** 在該時間段內人員平均停留的時間，通常以分鐘或秒為單位。該值可根據相關的 `StayRecord` 資料計算得出。
+
+**備註：** 透過這些資料，可以分析不同地點在不同時間的人流量情況，協助資源配置和人流管理。
+
+---
+
+### **1.7. Congestion（壅塞記錄）**
+
+**描述：** 此實體用於紀錄特定地點在特定時間段內的壅塞狀況。
+
+**屬性：**
+- **`CongestionID`** (主鍵，PK)：`int`，**不可為空（NOT NULL）**
+  - **說明：** 唯一識別每條壅塞記錄的編號。
+
+- **`LocationID`** (外鍵，FK1)：`int`，**不可為空（NOT NULL）**
+  - **說明：** 連結到 `Location` 實體，表示壅塞狀況所屬的地點。
+
+- **`TimeSlotID`** (外鍵，FK2)：`int`，**不可為空（NOT NULL）**
+  - **說明：** 連結到 `TimeSlot` 實體，表示壅塞狀況發生的時間段。
+
+- **`Occupancy`**：`int`，**不可為空（NOT NULL）**
+  - **說明：** 在該地點和時間段內的實際人數，即該地點當時的佔用人數。
+
+- **`IsCongested`**：`boolean`
+  - **說明：** 表示該地點在該時間段內是否處於壅塞狀態。通常根據 `Occupancy` 與 `SpaceSize` 的比率來判斷，若人數超過某一臨界值則標記為 `true`（壅塞），否則為 `false`。
+
+**備註：** 這些資訊有助於即時監控和管理人流，避免安全隱患，並優化空間使用。
+
+---
+
+### **1.8. ComfortRecord（舒適紀錄）**
+
+**描述：** 此實體用於紀錄特定地點在特定時間段內的舒適度狀況。
+
+**屬性：**
+- **`ComfortRecordID`** (主鍵，PK)：`int`，**不可為空（NOT NULL）**
+  - **說明：** 唯一識別每條舒適紀錄的編號。
+
+- **`LocationID`** (外鍵，FK1)：`int`，**不可為空（NOT NULL）**
+  - **說明：** 連結到 `Location` 實體，表示舒適度狀況所屬的地點。
+
+- **`TimeSlotID`** (外鍵，FK2)：`int`，**不可為空（NOT NULL）**
+  - **說明：** 連結到 `TimeSlot` 實體，表示舒適度狀況發生的時間段。
+
+- **`IsComfortable`**：`boolean`
+  - **說明：** 表示該地點在該時間段內是否處於舒適狀態。通常根據 `Occupancy` 與 `SpaceSize` 的比率來判斷，若人數在適當範圍內則標記為 `true`（舒適），否則為 `false`。
+
+**備註：** 透過這些資料，可以評估和改善空間的使用體驗，提升服務品質。
+
+---
+
+## **2. 關係（Relationships）**
+
+### **2.1. Person 與 Movement**
+
+**關係類型：** 一對多（1:N）
+
+**描述：**
+- **一個 `Person` 可以有多個 `Movement` 記錄。**
+  - **說明：** 單個人員可能在不同時間移動到多個地點，因此一個人員對應多條移動記錄。
+
+**外鍵：**
+- **`Movement` 中的 `PersonID` 連接到 `Person` 的 `PersonID`。**
+
+---
+
+### **2.2. Location 與 Movement**
+
+**關係類型：** 一對多（1:N）
+
+**描述：**
+- **一個 `Location` 可以有多個 `Movement` 記錄。**
+  - **說明：** 單個地點可能在不同時間被多個人員訪問，因此一個地點對應多條移動記錄。
+
+**外鍵：**
+- **`Movement` 中的 `LocationID` 連接到 `Location` 的 `LocationID`。**
+
+---
+
+### **2.3. TimeSlot 與 Movement**
+
+**關係類型：** 一對多（1:N）
+
+**描述：**
+- **一個 `TimeSlot` 可以有多個 `Movement` 記錄。**
+  - **說明：** 在特定時間段內，可能發生多次人員移動。
+
+**外鍵：**
+- **`Movement` 中的 `TimeSlotID` 連接到 `TimeSlot` 的 `TimeSlotID`。**
+
+---
+
+### **2.4. Person 與 StayRecord**
+
+**關係類型：** 一對多（1:N）
+
+**描述：**
+- **一個 `Person` 可以有多個 `StayRecord` 記錄。**
+  - **說明：** 單個人員可能在不同地點停留多次。
+
+**外鍵：**
+- **`StayRecord` 中的 `PersonID` 連接到 `Person` 的 `PersonID`。**
+
+---
+
+### **2.5. Location 與 StayRecord**
+
+**關係類型：** 一對多（1:N）
+
+**描述：**
+- **一個 `Location` 可以有多個 `StayRecord` 記錄。**
+  - **說明：** 單個地點可能在不同時間被多個人員停留。
+
+**外鍵：**
+- **`StayRecord` 中的 `LocationID` 連接到 `Location` 的 `LocationID`。**
+
+---
+
+### **2.6. TimeSlot 與 StayRecord**
+
+**關係類型：** 一對多（1:N）
+
+**描述：**
+- **一個 `TimeSlot` 可以有多個 `StayRecord` 記錄。**
+  - **說明：** 在特定時間段內，可能有多次停留發生。
+
+**外鍵：**
+- **`StayRecord` 中的 `TimeSlotID` 連接到 `TimeSlot` 的 `TimeSlotID`。**
+
+---
+
+### **2.7. Location 與 TrafficCount**
+
+**關係類型：** 一對多（1:N）
+
+**描述：**
+- **一個 `Location` 可以有多個 `TrafficCount` 記錄。**
+  - **說明：** 每個地點在不同時間段會有不同的人流量記錄。
+
+**外鍵：**
+- **`TrafficCount` 中的 `LocationID` 連接到 `Location` 的 `LocationID`。**
+
+---
+
+### **2.8. TimeSlot 與 TrafficCount**
+
+**關係類型：** 一對多（1:N）
+
+**描述：**
+- **一個 `TimeSlot` 可以有多個 `TrafficCount` 記錄。**
+  - **說明：** 在特定時間段內，會有不同地點的人流量記錄。
+
+**外鍵：**
+- **`TrafficCount` 中的 `TimeSlotID` 連接到 `TimeSlot` 的 `TimeSlotID`。**
+
+---
+
+### **2.9. Location 與 Congestion**
+
+**關係類型：** 一對多（1:N）
+
+**描述：**
+- **一個 `Location` 可以有多個 `Congestion` 記錄。**
+  - **說明：** 每個地點在不同時間段可能有不同的壅塞狀況。
+
+**外鍵：**
+- **`Congestion` 中的 `LocationID` 連接到 `Location` 的 `LocationID`。**
+
+---
+
+### **2.10. TimeSlot 與 Congestion**
+
+**關係類型：** 一對多（1:N）
+
+**描述：**
+- **一個 `TimeSlot` 可以有多個 `Congestion` 記錄。**
+  - **說明：** 在特定時間段內，不同地點可能有不同的壅塞狀況。
+
+**外鍵：**
+- **`Congestion` 中的 `TimeSlotID` 連接到 `TimeSlot` 的 `TimeSlotID`。**
+
+---
+
+### **2.11. Location 與 ComfortRecord**
+
+**關係類型：** 一對多（1:N）
+
+**描述：**
+- **一個 `Location` 可以有多個 `ComfortRecord` 記錄。**
+  - **說明：** 每個地點在不同時間段可能有不同的舒適度狀況。
+
+**外鍵：**
+- **`ComfortRecord` 中的 `LocationID` 連接到 `Location` 的 `LocationID`。**
+
+---
+
+### **2.12. TimeSlot 與 ComfortRecord**
+
+**關係類型：** 一對多（1:N）
+
+**描述：**
+- **一個 `TimeSlot` 可以有多個 `ComfortRecord` 記錄。**
+  - **說明：** 在特定時間段內，不同地點可能有不同的舒適度狀況。
+
+**外鍵：**
+- **`ComfortRecord` 中的 `TimeSlotID` 連接到 `TimeSlot` 的 `TimeSlotID`。**
+
+---
+
+## **總結**
+
+這個 ER 模型全面地描述了人員在不同地點和時間段內的活動，以及相關的人流量、壅塞和舒適度狀況。透過這些實體和關係，您可以：
+
+- 追蹤個別人員的移動路徑和停留情況。
+- 分析不同地點在不同時間段的人流量變化。
+- 判斷特定地點在特定時間段內是否存在壅塞或舒適問題。
+- 為空間規劃、人流管理和資源配置提供數據支持。
+
+希望以上詳細解釋能夠幫助您更好地理解和應用這個 ER 模型。如有其他需求或疑問，請隨時提出！

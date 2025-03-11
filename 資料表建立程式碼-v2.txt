@@ -1,0 +1,16 @@
+#視圖建立-系統檢視表
+
+CREATE VIEW vw_LiveStayRecord AS
+SELECT 
+    StayRecordID,
+    PersonID,
+    LocationID,
+    ArrivalTime,
+    DepartureTime,
+    CASE 
+        WHEN DepartureTime IS NULL THEN DATEDIFF(SECOND, ArrivalTime, GETDATE()) / 60.0
+        ELSE Duration
+    END AS LiveDuration
+FROM StayRecord;
+
+##這樣，每次儀表板刷新時，都能看到正在場內的人員目前的滯留時間，而離開的紀錄則保持原本的 Duration。
