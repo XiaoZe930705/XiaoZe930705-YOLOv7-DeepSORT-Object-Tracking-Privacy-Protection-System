@@ -1,9 +1,0 @@
-conda create -n yolov5 python=3.8 #創建yolov5環境
-conda activate yolov5 #激活環境
-pip list #查看環境
-pip install torch torchvision torchaudio #(安裝 PyTorch)
-pip install ultralytics
-cd OneDrive/D:/research-data/yolov5-master #進入資料夾
-python detect.py
-python detect.py --weights yolov5s.pt --source 0 #鏡頭偵測
-

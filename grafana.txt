@@ -1,3 +1,0 @@
-登入網址:http://localhost:3000/login
-帳號:admin
-密碼:J
