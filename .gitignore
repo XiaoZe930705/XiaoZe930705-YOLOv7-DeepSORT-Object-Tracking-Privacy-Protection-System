@@ -48,3 +48,6 @@ __pycache__/
 # 忽略 Conda & Virtualenv
 venv/
 .env/
+
+#忽略 txt
+*.txt
